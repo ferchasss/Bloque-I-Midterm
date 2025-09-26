@@ -12,7 +12,7 @@ canvas.height = window.innerHeight;
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({ canvas: canvas });
 renderer.setSize(canvas.width, canvas.height);
-renderer.setClearColor("#0a0c2c");
+renderer.setClearColor("#63280a");
 const camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 0.1, 1000);
 
 // 3.1 Configurar mesh.
@@ -33,7 +33,7 @@ const frontLight = new THREE.PointLight("#110707ff", 300, 100);
 frontLight.position.set(7, 3, 3);
 scene.add(frontLight);
 
-const rimLight = new THREE.PointLight("#0066ff", 50, 100);
+const rimLight = new THREE.PointLight("#e1741a", 50, 100);
 rimLight.position.set(-7, -3, -7);
 scene.add(rimLight);
 
@@ -65,25 +65,34 @@ manager.onError = function (url) {
 const loader = new THREE.TextureLoader(manager);
 
 // 3. Cargamos texturas guardadas en el folder del proyecto.
-const tex = {
+const metaltextura = {
    albedo: loader.load('./assets/texturas/metal/futuristic-cube-metal_albedo.png'),
    ao: loader.load('./assets/texturas/metal/futuristic-cube-metal_ao.png'),
   // metalness: loader.load('./assets/texturas/metal/.png'),
    normal: loader.load('./assets/texturas/metal/futuristic-cube-metal_normal-ogl.png'),
   // roughness: loader.load('./assets/texturas/metal/roughness.png'),
    displacement: loader.load('./assets/texturas/metal/futuristic-cube-metal_height.png'),
-};
-// 4. Definimos variables y la función que va a crear el material al cargar las texturas.
-var pbrMaterial;
 
+};
+
+const rustedTextures = {
+   albedo: loader.load('./assets/texturas/rusted/albedo.png'),
+   metalness: loader.load('./assets/texturas/rusted/metallic.png'),
+   normal: loader.load('./assets/texturas/rusted/normal.png'),
+   roughness: loader.load('./assets/texturas/rusted/roughness.png'),
+};
+
+// 4. Definimos variables y la función que va a crear el material al cargar las texturas.
+var metalmaterial;
+var rustedMaterial;
 function createMaterial() {
-   pbrMaterial = new THREE.MeshStandardMaterial({
-       map: tex.albedo,
-       aoMap: tex.ao,
-       //metalnessMap: tex.ao,
-       normalMap: tex.normal,
-       //roughnessMap: tex.roughness,
-       displacementMap: tex.displacement,
+   metalmaterial = new THREE.MeshStandardMaterial({
+       map: metaltextura.albedo,
+       aoMap: metaltextura.ao,
+       //metalnessMap: metaltextura.ao,
+       normalMap: metaltextura.normal,
+       //roughnessMap: metaltextura.roughness,
+       displacementMap: metaltextura.displacement,
        displacementScale: .2,
        side: THREE.FrontSide,
        metalness:1,
@@ -91,9 +100,22 @@ function createMaterial() {
       
        // wireframe: true,
    });
+  rustedMaterial = new THREE.MeshStandardMaterial({
+       map: rustedTextures.albedo,
+       metalnessMap: rustedTextures.metalness,
+       normalMap: rustedTextures.normal,
+       roughnessMap: rustedTextures.roughness,
+       metalness: 1,
+       roughness: 1,
+       side: THREE.DoubleSide,
+       // wireframe: true,
+   });
 
-   mesh.material = pbrMaterial;
+   mesh.material = metalmaterial;
+   mesh.material = rustedMaterial;
 }
+
+
 
 //// B) Rotación al scrollear.
 // 1. Crear un objeto con la data referente al SCROLL para ocuparla en todos lados.
@@ -158,14 +180,19 @@ function calculateNormalOffset() {
    mouse.normalOffset.x = ( (mouse.x - windowCenter.x) / canvas.width ) * 2;
    mouse.normalOffset.y = ( (mouse.y - windowCenter.y) / canvas.height ) * 2;
 }
-
-window.addEventListener("mousemove", updateMouseData);
-// 3. Aplicar valor calculado a la posición de la cámara. (en el loop de animación)
-function updateCameraPosition() {
-   camera.position.x = mouse.normalOffset.x * mouse.gazeRange.x;
-   camera.position.y = -mouse.normalOffset.y * mouse.gazeRange.y;
+    function lerpDistanceToCenter() {
+   mouse.lerpNormalOffset.x += (mouse.normalOffset.x - mouse.lerpNormalOffset.x) * mouse.cof;
+   mouse.lerpNormalOffset.y += (mouse.normalOffset.y - mouse.lerpNormalOffset.y) * mouse.cof;
 }
 
+window.addEventListener("mousemove", updateMouseData);
+
+
+// 3. Aplicar valor calculado a la posición de la cámara. (en el loop de animación)
+function updateCameraPosition() {
+   camera.position.x = mouse.lerpNormalOffset.x * mouse.gazeRange.x;
+   camera.position.y = -mouse.lerpNormalOffset.y * mouse.gazeRange.y;
+}
 
 
 
@@ -184,6 +211,7 @@ function animate() {
    //mesh.rotation.x -= 0.005;
    lerpScrollY()
  updateMeshRotation();
+ lerpDistanceToCenter();
  updateCameraPosition();
   camera.lookAt(mesh.position);
     renderer.render(scene, camera);
