@@ -10,7 +10,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Formula", sans-serif;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
     color: rgb(245, 224, 131);
 }
 
@@ -111,4 +111,24 @@ footer {
 .sandButton {
     cursor: pointer;
   
+}
+#instrucciones {
+    font-family: "Formula", sans-serif;
+    font-weight: 100;                   /* el único peso disponible */
+    text-transform: none;               /* respeta mayúsculas/minúsculas */
+    font-size: 1.5vh;
+    line-height: 1.8vh;
+    color: rgb(245, 224, 131);
+    position: absolute;
+    top: 50%;
+    left: 2%;
+    transform: translateY(-50%);
+    max-width: 200px;
+    z-index: 20;
+}
+
+#instrucciones h3 {
+    margin-bottom: 0.5em;
+    font-size: 2vh;
+    font-weight: 100;                      /* thin */
 }
