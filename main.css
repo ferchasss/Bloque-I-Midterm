@@ -19,7 +19,7 @@
     top: 0; left: 0;
     width: 100%;
     height: 100%;
-    background-color: #d6651a;
+    /*background-color: #d6651a;*/
 }
 
 header {
@@ -37,13 +37,16 @@ header {
     font-size: 4vh;
     font-weight: lighter;
     -webkit-font-smoothing: antialiased;
-    font-smooth: always;
+    font-family: "ethnocentric", sans-serif;
+    font-weight: 100;
+    font-style: normal;
 }
 
 footer {
     position: absolute;
     bottom: 0; left: 0;
     width: 100%;
+    
     /*mix-blend-mode: luminosity;*/
 }
 
@@ -52,6 +55,11 @@ footer {
     padding: 2vh 0 0 2vh;
     font-size: 30vh;
     color:rgb(130, 108, 9);
+    
+    font-family: "ethnocentric", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    
 }
 
 #centroLogo {
@@ -60,34 +68,44 @@ footer {
     right: 2.2vh;
     width: 10vh;
 }
- #btn1, #btn2 {
-        position: absolute;
-        right: 30px;
-        width: 60px;
-        height: 60px;
-        border: none;
-        margin: 10px;
-        font-size: 16px;
-     
-        cursor: pointer;
-        z-index: 10;
-      }
-      #btn1 {
-        top: 50%;
-        transform: translateY(-70px); /* Ajusta para separar los botones */
-        background-image:url(./assets/texturas/bricks/albedo.png);
-      }
-      #btn2 {
-        top: 50%;
-        transform: translateY(20px); /* Ajusta para separar los botones */
-        background-image: url(./assets/texturas/metal/futuristic-cube-metal_albedo.png);
-      }
+ #metalButton, #rustedButton, #sandButton {
+  position: absolute;
+  right: 30px;   /* lado derecho */
+  width: 80px;
+  height: 80px;
+  background-size: cover;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+}
+
+#metalButton {
+  top: 40%;
+  background-image: url(./assets/texturas/metal/futuristic-cube-metal_albedo.png);
+}
+
+#rustedButton {
+  top: 55%;
+  background-image: url(./assets/texturas/rusted/albedo.png);
+}
+
+#sandButton {
+  top: 70%;
+  background-image: url(./assets/texturas/sand/sand-dunes1_albedo.png);
+
+}
+
 .metalButton {
     position: absolute;
     width: 80px;
     height: 80px;
 }
-.ladrilloButton {
+.rustedButton {
     cursor: pointer;
-    outline: 4px solid white;
+    
+}
+.sandButton {
+    cursor: pointer;
+  
 }
