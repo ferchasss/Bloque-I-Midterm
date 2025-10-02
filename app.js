@@ -315,3 +315,11 @@ cubeTextures.forEach(tex => {
     tex.wrapS = THREE.ClampToEdgeWrapping;
     tex.wrapT = THREE.ClampToEdgeWrapping;
 });
+
+window.addEventListener('keydown', (event) => {
+    // Verifica que la tecla presionada sea "W" (mayúscula o minúscula)
+    if (event.key === 'w' || event.key === 'W') {
+        // Cambia el modo wireframe del material actual
+        mesh.material.wireframe = !mesh.material.wireframe;
+    }
+});
